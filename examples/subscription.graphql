@@ -1,0 +1,6 @@
+subscription JevCatalogReview {
+  event {
+    ... on ProductCreated { product { id name description privateMetadata { key value } } }
+    ... on ProductUpdated { product { id name description privateMetadata { key value } } }
+  }
+}
