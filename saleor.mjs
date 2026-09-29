@@ -1,5 +1,5 @@
 import { createRemoteJWKSet, flattenedVerify } from 'jose';
-import { decide } from './decision.mjs';
+import { decide, decisionIdentity } from './decision.mjs';
 
 export async function verifySignature(raw, signature, apiUrl, { jwks } = {}) {
   if (typeof signature !== 'string' || !/^[A-Za-z0-9_-]+\.\.[A-Za-z0-9_-]+$/.test(signature)) throw new Error('Missing Saleor JWS');
@@ -31,9 +31,10 @@ export async function processEvent(event, { evaluate = decide, write = writeMeta
   if (!product?.id) return { skipped: 'not a product event' };
   const text = productText(product);
   if (!text) return { skipped: 'empty product text' };
-  const result = await evaluate(text, key);
   const prior = Object.fromEntries((product.privateMetadata || []).map(({ key, value }) => [key, value]));
-  if (prior.jev_input_sha256 === result.inputSha256 && prior.jev_policy_version === result.policyVersion) return { skipped: 'already reviewed' };
+  const identity = decisionIdentity(text);
+  if (prior.jev_input_sha256 === identity.inputSha256 && prior.jev_policy_version === identity.policyVersion) return { skipped: 'already reviewed' };
+  const result = await evaluate(text, key);
   await write(product.id, result);
   return result;
 }

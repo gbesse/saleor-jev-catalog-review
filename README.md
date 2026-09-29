@@ -1,6 +1,6 @@
 # Saleor Jev Catalog Review
 
-Experimental community alpha v0.1.0 · MIT.
+Experimental community alpha v0.1.1 · MIT.
 
 ## Français
 
@@ -17,6 +17,8 @@ Variables serveur : `TYPESAFE_API_KEY, SALEOR_API_URL, SALEOR_APP_TOKEN`. Garder
 
 Configurer un webhook asynchrone `PRODUCT_CREATED` ou `PRODUCT_UPDATED` associé à une app, sans `secretKey` hérité. Inclure `product { id name description privateMetadata { key value } }` dans l’abonnement. Autoriser `MANAGE_PRODUCTS`.
 
+Un webhook déjà revu avec le même texte et la même politique est ignoré avant tout nouvel appel à Jev.
+
 ## English
 
 A service verifies Saleor JWS webhooks, evaluates product text, and writes a decision to private metadata. It does not automatically publish or block a product.
@@ -32,6 +34,8 @@ Server variables: `TYPESAFE_API_KEY, SALEOR_API_URL, SALEOR_APP_TOKEN`. Keep sec
 
 Configure an asynchronous `PRODUCT_CREATED` or `PRODUCT_UPDATED` webhook for an app, without a legacy `secretKey`. Include `product { id name description privateMetadata { key value } }` in the subscription. Grant `MANAGE_PRODUCTS`.
 
+A webhook already reviewed with the same text and policy is skipped before another Jev call.
+
 ## Español
 
 Un servicio verifica webhooks JWS de Saleor, evalúa el texto de un producto y escribe una decisión en metadatos privados. No publica ni bloquea productos automáticamente.
@@ -46,6 +50,8 @@ npm start
 Variables del servidor: `TYPESAFE_API_KEY, SALEOR_API_URL, SALEOR_APP_TOKEN`. Mantén los secretos fuera del repositorio y de la configuración visible para usuarios.
 
 Configura un webhook asíncrono `PRODUCT_CREATED` o `PRODUCT_UPDATED` para una aplicación, sin `secretKey` heredado. Incluye `product { id name description privateMetadata { key value } }` en la suscripción. Concede `MANAGE_PRODUCTS`.
+
+Un webhook ya revisado con el mismo texto y la misma política se omite antes de otra llamada a Jev.
 
 ## Verification / Vérification / Verificación
 

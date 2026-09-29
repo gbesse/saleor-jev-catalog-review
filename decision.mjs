@@ -2,6 +2,10 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 const policy = JSON.parse(readFileSync(new URL('./policy.json', import.meta.url)));
 
+export function decisionIdentity(text) {
+  return { inputSha256: createHash('sha256').update(text).digest('hex'), policyVersion: policy.version };
+}
+
 export async function decide(text, key, { fetcher = fetch } = {}) {
   if (typeof text !== 'string' || !text.trim() || text.length > 16000) throw new Error('Invalid text');
   if (!key) throw new Error('TYPESAFE_API_KEY is required');
@@ -14,5 +18,5 @@ export async function decide(text, key, { fetcher = fetch } = {}) {
   const choice = answer?.choice;
   const probability = answer?.probabilities?.[choice];
   if (!Object.hasOwn(policy.criteria, choice) || typeof probability !== 'number' || !Number.isFinite(probability) || probability < 0 || probability > 1) throw new Error('Invalid Jev choice');
-  return { schemaVersion: 1, outcome: choice !== 'other' && probability >= policy.threshold ? choice : 'review', choice, probability, threshold: policy.threshold, model: policy.model, policyVersion: policy.version, inputSha256: createHash('sha256').update(text).digest('hex') };
+  return { schemaVersion: 1, outcome: choice !== 'other' && probability >= policy.threshold ? choice : 'review', choice, probability, threshold: policy.threshold, model: policy.model, ...decisionIdentity(text) };
 }

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { generateKeyPair, exportJWK, FlattenedSign, createLocalJWKSet } from 'jose';
-import { decide } from '../decision.mjs';
-import { verifySignature, processEvent, writeMetadata } from '../saleor.mjs';
+import { decide, decisionIdentity } from '../decision.mjs';
+import { verifySignature, processEvent, writeMetadata, productText } from '../saleor.mjs';
 
 test('Jev accepted choice and review threshold', async () => {
   const fetcher = async (_, options) => {
@@ -24,13 +24,13 @@ test('Saleor detached JWS is verified and tampering rejected', async () => {
 
 test('Product event writes decision metadata once', async () => {
   const calls=[];
-  const decision={ outcome:'review', choice:'review', probability:0.95, policyVersion:'0.1.0', inputSha256:'abc' };
   const event={ product:{ id:'UHJvZHVjdDox', name:'Vitamin', description:'{"blocks":[{"data":{"text":"Cures everything"}}]}' } };
+  const decision={ outcome:'review', choice:'review', probability:0.95, ...decisionIdentity(productText(event.product)) };
   await processEvent(event,{ evaluate:async()=>decision, write:async (...args)=>calls.push(args), key:'test' });
   assert.equal(calls.length,1);
   assert.equal(calls[0][0],event.product.id);
-  event.product.privateMetadata=[{key:'jev_input_sha256',value:'abc'},{key:'jev_policy_version',value:'0.1.0'}];
-  const result=await processEvent(event,{ evaluate:async()=>decision, write:async (...args)=>calls.push(args), key:'test' });
+  event.product.privateMetadata=[{key:'jev_input_sha256',value:decision.inputSha256},{key:'jev_policy_version',value:decision.policyVersion}];
+  const result=await processEvent(event,{ evaluate:async()=>{ throw new Error('Jev must not run on replay'); }, write:async (...args)=>calls.push(args), key:'test' });
   assert.equal(result.skipped,'already reviewed');
   assert.equal(calls.length,1);
 });
