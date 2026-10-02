@@ -1,8 +1,10 @@
 # Saleor Jev Catalog Review
 
-Experimental community alpha v0.1.1 · MIT.
+Experimental community alpha v0.1.2 · MIT.
 
 ## Français
+
+Exemple hors ligne : `node examples/offline-catalog.mjs` rejoue une fiche de tasse synthétique à deux niveaux de probabilité. La faible probabilité reste en revue ; aucune clé ni requête réseau.
 
 Un service vérifie les webhooks JWS de Saleor, analyse le texte d’un produit et écrit une décision dans ses métadonnées privées. Il ne publie ni ne bloque automatiquement un produit.
 
@@ -21,6 +23,8 @@ Un webhook déjà revu avec le même texte et la même politique est ignoré ava
 
 ## English
 
+Offline example: `node examples/offline-catalog.mjs` replays a synthetic mug listing at two probability levels. Low probability remains in review; no key or network request.
+
 A service verifies Saleor JWS webhooks, evaluates product text, and writes a decision to private metadata. It does not automatically publish or block a product.
 
 Setup:
@@ -37,6 +41,8 @@ Configure an asynchronous `PRODUCT_CREATED` or `PRODUCT_UPDATED` webhook for an 
 A webhook already reviewed with the same text and policy is skipped before another Jev call.
 
 ## Español
+
+Ejemplo sin conexión: `node examples/offline-catalog.mjs` reproduce una ficha sintética de una taza con dos niveles de probabilidad. La probabilidad baja queda para revisión; no requiere clave ni red.
 
 Un servicio verifica webhooks JWS de Saleor, evalúa el texto de un producto y escribe una decisión en metadatos privados. No publica ni bloquea productos automáticamente.
 
