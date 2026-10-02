@@ -1,3 +1,7 @@
+## v0.1.2
+
+Offline synthetic catalog-claim review example; no API key required.
+
 # Changelog / Journal / Registro
 
 ## 0.1.1

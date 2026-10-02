@@ -1,6 +1,6 @@
 {
   "name": "saleor-jev-catalog-review",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "private": false,
   "description": "Signed Saleor catalog webhook review with Jev",
